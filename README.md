@@ -1,4 +1,11 @@
-# Auto-GPT-Plugin-Template
+# Auto-GPT-AlpacaTrader
+
+
+Credit where credit is due to [isaiahbjork](https://github.com/isaiahbjork/Auto-GPT-MetaTrader-Plugin/) this is meant to be pretty similar to his just using the
+Alpaca Trading platform
+
+
+
 A starting point for developing your own external plug-in for Auto-GPT
 
 # **If you want your plugin to live within the codebase, use the example in the [plugins repo](https://github.com/Significant-Gravitas/Auto-GPT-Plugins) instead**
@@ -28,6 +35,7 @@ A starting point for developing your own external plug-in for Auto-GPT
 
    ``` shell
    ALLOWLISTED_PLUGINS=example-plugin1,example-plugin2,example-plugin3
+   ALLOWLISTED_PLUGINS=AutoGPTAlpacaTraderPlugin
    ```
 
    If the plugin is not allowlisted, you will be warned before it's loaded.
