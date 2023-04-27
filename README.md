@@ -35,7 +35,11 @@ A starting point for developing your own external plug-in for Auto-GPT
 
    ``` shell
    ALLOWLISTED_PLUGINS=example-plugin1,example-plugin2,example-plugin3
+   Example:
    ALLOWLISTED_PLUGINS=AutoGPTAlpacaTraderPlugin
+   APCA_API_KEY_ID=your_api_key
+   APCA_API_SECRET_KEY=your_api_secret_key
+   APCA_API_BASE_URL=your_api_base_url
    ```
 
    If the plugin is not allowlisted, you will be warned before it's loaded.
