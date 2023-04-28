@@ -194,11 +194,10 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
         ),
         return prompt
 # ______________________________________________________________________________________________________________________
-
-    def fetch_candlesticks(symbol, timeframe, start, end, limit=1000):
+    def fetch_candlesticks(self,symbol, timeframe, start, end, limit=1000):
         return api.get_barset(symbol, timeframe, limit=limit, start=start, end=end).df[symbol]
 
-    def close_trade(symbol):
+    def close_trade(self,symbol):
         positions = api.list_positions()
         for position in positions:
             if position.symbol == symbol:
@@ -219,18 +218,18 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
                         time_in_force='gtc'
                     )
 
-    def close_all_trades():
+    def close_all_trades(self):
         positions = api.list_positions()
         for position in positions:
             close_trade(position.symbol)
 
-    def get_account_information():
+    def get_account_information(self):
         return api.get_account()
 
-    def get_positions():
+    def get_positions(self):
         return api.list_positions()
 
-    def place_trade(symbol, qty, side, order_type, time_in_force):
+    def place_trade(self,symbol, qty, side, order_type, time_in_force):
         api.submit_order(
             symbol=symbol,
             qty=qty,
@@ -239,56 +238,59 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             time_in_force=time_in_force
         )
 
-    def _prepare_data(symbol, timeframe, start, end):
+    def _prepare_data(self,symbol, timeframe, start, end):
         data = fetch_candlesticks(symbol, timeframe, start, end)
         data = add_all_ta_features(data, open="open", high="high", low="low", close="close", volume="volume")
         return data
 
     # Technical indicators
-    def rsi(symbol, timeframe, start, end, n=14):
+    def rsi(self,symbol, timeframe, start, end, period=14):
         data = _prepare_data(symbol, timeframe, start, end)
-        rsi_indicator = RSIIndicator(data['close'], window=n)
+        rsi_indicator = RSIIndicator(data['close'], window=period)
         return rsi_indicator.rsi()
 
-    def money_flow_index(symbol, timeframe, start, end, n=14):
+    def money_flow_index(self,symbol, timeframe, start, end, period=14):
         data = _prepare_data(symbol, timeframe, start, end)
-        mfi_indicator = MFIIndicator(data['high'], data['low'], data['close'], data['volume'], window=n)
+        mfi_indicator = MFIIndicator(data['high'], data['low'], data['close'], data['volume'], window=period)
         return mfi_indicator.money_flow_index()
 
-    def volume(symbol, timeframe, start, end):
+    def volume(self,symbol, timeframe, start, end):
         data = fetch_candlesticks(symbol, timeframe, start, end)
         return data['volume']
 
-    def sma(symbol, timeframe, start, end, n=14):
+    def sma(self,symbol, timeframe, start, end, period=14):
         data = _prepare_data(symbol, timeframe, start, end)
-        sma_indicator = SMAIndicator(data['close'], window=n)
+        sma_indicator = SMAIndicator(data['close'], window=period)
         return sma_indicator.sma_indicator()
-    def ema(symbol, timeframe, start, end, n=14):
+
+    def ema(self,symbol, timeframe, start, end, period=14):
         data = _prepare_data(symbol, timeframe, start, end)
-        ema_indicator = EMAIndicator(data['close'], window=n)
+        ema_indicator = EMAIndicator(data['close'], window=period)
         return ema_indicator.ema_indicator()
 
-    def macd(symbol, timeframe, start, end, n_slow=26, n_fast=12, n_sign=9):
+    def macd(self,symbol, timeframe, start, end, period_slow=26, period_fast=12, period_sign=9):
         data = _prepare_data(symbol, timeframe, start, end)
-        macd_indicator = MACD(data['close'], n_slow=n_slow, n_fast=n_fast, n_sign=n_sign)
+        macd_indicator = MACD(data['close'], n_slow=period_slow, n_fast=period_fast, n_sign=period_sign)
         return macd_indicator.macd(), macd_indicator.macd_signal(), macd_indicator.macd_diff()
 
-    def wma(symbol, timeframe, start, end, n=14):
+
+
+    def wma(self,symbol, timeframe, start, end, period=14):
         data = _prepare_data(symbol, timeframe, start, end)
-        vwap = VolumeWeightedAveragePrice(data['high'], data['low'], data['close'], data['volume'], window=n)
+        vwap = VolumeWeightedAveragePrice(data['high'], data['low'], data['close'], data['volume'], window=period)
         return vwap.volume_weighted_average_price()
 
-    def adx(symbol, timeframe, start, end, n=14):
+    def adx(self,symbol, timeframe, start, end, n=14):
         data = _prepare_data(symbol, timeframe, start, end)
         adx_indicator = ADXIndicator(data['high'], data['low'], data['close'], window=n)
         return adx_indicator.adx()
 
-    def adi(symbol, timeframe, start, end, n=14):
+    def adi(self,symbol, timeframe, start, end, n=14):
         data = _prepare_data(symbol, timeframe, start, end)
         atr = AverageTrueRange(data['high'], data['low'], data['close'], window=n)
         return atr.average_true_range()
 
-    def fib_retracements(symbol, timeframe, start, end):
+    def fib_retracements(self,symbol, timeframe, start, end):
         data = fetch_candlesticks(symbol, timeframe, start, end)
         high = data['high'].max()
         low = data['low'].min()
@@ -296,17 +298,17 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
         retracements = [(high - low) * level for level in levels]
         return [(high - r, level) for r, level in zip(retracements, levels)]
 
-    def stochastic_oscillator(symbol, timeframe, start, end, n=14):
+    def stochastic_oscillator(self,symbol, timeframe, start, end, n=14):
         data = _prepare_data(symbol, timeframe, start, end)
         stoch = StochasticOscillator(data['high'], data['low'], data['close'], window=n)
         return stoch.stoch(), stoch.stoch_signal()
 
-    def tsi(symbol, timeframe, start, end, r=25, s=13):
+    def tsi(self,symbol, timeframe, start, end, r=25, s=13):
         data = _prepare_data(symbol, timeframe, start, end)
         tsi_indicator = TSIIndicator(data['close'], r, s)
         return tsi_indicator.tsi()
 
-    def get_stock_of_the_day():
+    def get_stock_of_the_day(self):
         assets = api.list_assets(status='active', asset_class='us_equity')
         symbols = [asset.symbol for asset in assets]
         return np.random.choice(symbols)
@@ -473,3 +475,11 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
           Returns:
               bool: True if the plugin can handle the chat_completion method."""
         return False
+
+# maunal te
+# ______________________________________________________________________________________________________________________
+
+# trader = AutoGPTAlpacaTraderPlugin()
+# print(trader)
+
+# print(trader.get_positions())
