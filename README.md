@@ -4,38 +4,31 @@
 Credit where credit is due to [isaiahbjork](https://github.com/isaiahbjork/Auto-GPT-MetaTrader-Plugin/) this is meant to be pretty similar to his just using the
 Alpaca Trading platform
 
-
-
-A starting point for developing your own external plug-in for Auto-GPT
-
-# **If you want your plugin to live within the codebase, use the example in the [plugins repo](https://github.com/Significant-Gravitas/Auto-GPT-Plugins) instead**
-
 ### Plugin Installation Steps
 
-1. **Clone or download the plugin repository:**
-   Clone the plugin repository, or download the repository as a zip file.
-  
-   ![Download Zip](https://raw.githubusercontent.com/BillSchumacher/Auto-GPT/master/plugin.png)
+for Linux, depending on distro
+```
+sudo apt-get install zip
+apk add zip
+sudo pacman -S zip
+sudo yum install zip
+```
+Mac / Linux / WSL
+```
+cd plugins && git clone https://github.com/danikhan632/Auto-GPT-AlpacaTrader-Plugin.git && zip -r ./Auto-GPT-AlpacaTrader-Plugin.zip ./Auto-GPT-AlpacaTrader-Plugin && rm -rf ./Auto-GPT-AlpacaTrader-Plugin && cd .. && ./run.sh --install-plugin-deps
 
-2. **Install the plugin's dependencies (if any):**
-   Navigate to the plugin's folder in your terminal, and run the following command to install any required dependencies:
+```
+Windows, Powershell
+```
+cd plugins; git clone https://github.com/danikhan632/Auto-GPT-AlpacaTrader-Plugin.git; Compress-Archive -Path .\Auto-GPT-AlpacaTrader-Plugin -DestinationPath .\Auto-GPT-AlpacaTrader-Plugin.zip; Remove-Item -Recurse -Force .\Auto-GPT-AlpacaTrader-Plugin; cd ..
+```
 
-   ``` shell
-      pip install -r requirements.txt
-   ```
 
-3. **Package the plugin as a Zip file:**
-   If you cloned the repository, compress the plugin folder as a Zip file.
-
-4. **Copy the plugin's Zip file:**
-   Place the plugin's Zip file in the `plugins` folder of the Auto-GPT repository.
 
 5. **Allowlist the plugin (optional):**
    Add the plugin's class name to the `ALLOWLISTED_PLUGINS` in the `.env` file to avoid being prompted with a warning when loading the plugin:
 
    ``` shell
-   ALLOWLISTED_PLUGINS=example-plugin1,example-plugin2,example-plugin3
-   Example:
    ALLOWLISTED_PLUGINS=AutoGPTAlpacaTraderPlugin
    APCA_API_KEY_ID=your_api_key
    APCA_API_SECRET_KEY=your_api_secret_key
