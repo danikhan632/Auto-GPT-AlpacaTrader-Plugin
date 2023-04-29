@@ -5,20 +5,7 @@ from auto_gpt_plugin_template import AutoGPTPluginTemplate
 import pandas as pd
 import numpy as np
 import requests
-import os
-# import alpaca
-# from alpaca.trading.client import TradingClient
-# from alpaca.trading.requests import MarketOrderRequest
-# from alpaca.trading.enums import OrderSide, TimeInForce
-# from alpaca.trading.models import Position
-# from datetime import datetime
-
-# api_key = os.environ.get('APCA_API_KEY_ID')
-# api_secret = os.environ.get('APCA_API_SECRET_KEY') 
-# isPaper= bool(os.environ.get('IS_PAPER') )
-# trading_client =  TradingClient(api_key, api_secret,paper=True)
-
-trading_client=None
+from .trader import Trader
 
 PromptGenerator = TypeVar("PromptGenerator")
 
@@ -37,25 +24,27 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
         self._name = "Auto-GPT-AlpacaTrader"
         self._version = "0.1.0"
         self._description = "This is a plugin for Auto-GPT-AlpacaTrader."
+        self.cli= Trader()
+        
 
     def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
         prompt.add_command(
             "Close All Trades",
             "close_all_trades",
             {},
-            self.close_all_trades
+            self.cli.close_all_trades
         ),
         prompt.add_command(
             "Get Account Information",
             "get_account_information",
             {},
-            self.get_account_information
+            self.cli.get_account_information
         ),
         prompt.add_command(
             "Get Positions",
             "get_positions",
             {},
-            self.get_positions
+            self.cli.get_positions
         ),
         prompt.add_command(
             "Place Trade",
@@ -65,60 +54,10 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
                 "volume": "<volume>",
                 "signal": "<signal>"
             },
-            self.place_trade
+            self.cli.place_trade
         )
         return prompt
 # ______________________________________________________________________________________________________________________
-
-    def close_trade(self,symbol):
-        # positions = trading_client.get_all_positions()
-        # for position in positions:
-        #     if position.symbol == symbol:
-        #         if position.side == 'long':
-        #             trading_client.submit_order(
-        #                 symbol=symbol,
-        #                 qty=position.qty,
-        #                 side='sell',
-        #                 type='market',
-        #                 time_in_force='gtc'
-        #             )
-        #         elif position.side == 'short':
-        #             trading_client.submit_order(
-        #                 symbol=symbol,
-        #                 qty=position.qty,
-        #                 side='buy',
-        #                 type='market',
-        #                 time_in_force='gtc'
-        #             )
-        print("close trade")
-
-    def close_all_trades(self):
-        # trading_client.cancel_orders()
-        print("cancel orders")
-
-    def get_account_information(self):
-        # return trading_client.get_account()
-        print("acct")
-        return "acct"
-
-    def get_positions(self):
-        # def pos_to_json(pos):
-        #     res = { "asset_id": str(pos.asset_id), "symbol": pos.symbol, "avg_entry_price": pos.avg_entry_price, "qty": pos.qty, "market_value": pos.market_value, "cost_basis": pos.cost_basis, "unrealized_pl": pos.unrealized_pl, "unrealized_plpc": pos.unrealized_plpc, "unrealized_intraday_pl": pos.unrealized_intraday_pl, "unrealized_intraday_plpc": pos.unrealized_intraday_plpc, "current_price": pos.current_price, "lastday_price": pos.lastday_price, "change_today": pos.change_today, "asset_marginable": pos.asset_marginable }
-        #     return res
-        # positions = trading_client.get_all_positions()
-        # formatted_positions = [pos_to_json(position) for position in positions]
-        # return formatted_positions
-        return "get position"
-    def place_trade(self,symbol, qty, side, order_type, time_in_force):
-        # order_data = MarketOrderRequest(
-        #     symbol=symbol,
-        #     qty=qty,
-        #     side=side,
-        #     time_in_force=time_in_force
-        # )
-        # order=trading_client.submit_order(order_data)
-        # print(order)
-        print("place trade")
 
 # ______________________________________________________________________________________________________________________
     def handle_chat_completion(
