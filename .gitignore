@@ -26,7 +26,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-tempw.py
+testing.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -55,7 +55,7 @@ coverage.xml
 # Translations
 *.mo
 *.pot
-
+test_functons.ipynb
 # Django stuff:
 *.log
 local_settings.py
@@ -110,6 +110,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+al_functions.py
 
 # Spyder project settings
 .spyderproject

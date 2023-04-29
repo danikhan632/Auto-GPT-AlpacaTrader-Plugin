@@ -7,7 +7,9 @@ wheel
 setuptools
 build
 twine
-alpaca-trade-api
+pandas
 numpy
+ta
+alpaca-py
 requests
-Candlestick
+

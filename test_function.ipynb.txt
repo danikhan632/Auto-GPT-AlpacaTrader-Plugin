@@ -1,0 +1,127 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import requests\n",
+    "import os\n",
+    "# import alpaca\n",
+    "from alpaca.trading.client import TradingClient\n",
+    "from alpaca.trading.requests import MarketOrderRequest\n",
+    "from alpaca.trading.enums import OrderSide, TimeInForce\n",
+    "from alpaca.trading.models import Position\n",
+    "from datetime import datetime\n",
+    "\n",
+    "api_key = \"\"\n",
+    "api_secret = \"\"\n",
+    "# isPaper= bool(os.environ.get('IS_PAPER') )\n",
+    "trading_client =  TradingClient(api_key, api_secret,paper=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def close_trade(symbol):\n",
+    "    positions = trading_client.get_all_positions()\n",
+    "    for position in positions:\n",
+    "        if position.symbol == symbol:\n",
+    "            if position.side == 'long':\n",
+    "                trading_client.submit_order(\n",
+    "                    symbol=symbol,\n",
+    "                    qty=position.qty,\n",
+    "                    side='sell',\n",
+    "                    type='market',\n",
+    "                    time_in_force='gtc'\n",
+    "                )\n",
+    "            elif position.side == 'short':\n",
+    "                trading_client.submit_order(\n",
+    "                    symbol=symbol,\n",
+    "                    qty=position.qty,\n",
+    "                    side='buy',\n",
+    "                    type='market',\n",
+    "                    time_in_force='gtc'\n",
+    "                )\n",
+    "\n",
+    "def close_all_trades():\n",
+    "    trading_client.cancel_orders()\n",
+    "\n",
+    "def get_account_information():\n",
+    "    return trading_client.get_account()\n",
+    "\n",
+    "def get_positions():\n",
+    "    def pos_to_json(pos):\n",
+    "        res = { \"asset_id\": str(pos.asset_id), \"symbol\": pos.symbol, \"avg_entry_price\": pos.avg_entry_price, \"qty\": pos.qty, \"market_value\": pos.market_value, \"cost_basis\": pos.cost_basis, \"unrealized_pl\": pos.unrealized_pl, \"unrealized_plpc\": pos.unrealized_plpc, \"unrealized_intraday_pl\": pos.unrealized_intraday_pl, \"unrealized_intraday_plpc\": pos.unrealized_intraday_plpc, \"current_price\": pos.current_price, \"lastday_price\": pos.lastday_price, \"change_today\": pos.change_today, \"asset_marginable\": pos.asset_marginable }\n",
+    "        return res\n",
+    "    positions = trading_client.get_all_positions()\n",
+    "    formatted_positions = [pos_to_json(position) for position in positions]\n",
+    "    return formatted_positions\n",
+    "\n",
+    "def place_trade(symbol, qty, side, order_type, time_in_force):\n",
+    "    order_data = MarketOrderRequest(\n",
+    "        symbol=symbol,\n",
+    "        qty=qty,\n",
+    "        side=side,\n",
+    "        time_in_force=time_in_force\n",
+    "    )\n",
+    "    order=trading_client.submit_order(order_data)\n",
+    "    # print(order)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "# Close a trade\n",
+    "close_trade(\"AAPL\")\n",
+    "\n",
+    "# Close all trades\n",
+    "close_all_trades()\n",
+    "\n",
+    "# Get account information\n",
+    "account_info = get_account_information()\n",
+    "print(account_info)\n",
+    "\n",
+    "# Get positions\n",
+    "positions = get_positions()\n",
+    "for position in positions:\n",
+    "    print(position)\n",
+    "    \n",
+    "# Place a trade\n",
+    "place_trade(\"AAPL\", 10, \"buy\", \"market\", \"gtc\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.11"
+  },
+  "orig_nbformat": 4
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
