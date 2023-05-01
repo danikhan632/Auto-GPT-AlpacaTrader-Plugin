@@ -41,6 +41,12 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             self.cli.get_account_information
         ),
         prompt.add_command(
+            "Get Allowed Stocks",
+            "get_allowed_stocks",
+            {},
+            self.cli.get_allowed_stocks
+        ),
+        prompt.add_command(
             "Get Positions",
             "get_positions",
             {},
@@ -51,8 +57,10 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             "place_trade",
             {
                 "symbol": "<symbol>",
-                "volume": "<volume>",
-                "signal": "<signal>"
+                "quantity": "<quantity>",
+                "side" :"<side>" ,
+                "order_type":"<order_type>",
+                "time_in_force":"<time_in_force>"
             },
             self.cli.place_trade
         )
