@@ -58,7 +58,9 @@ cd plugins; git clone https://github.com/danikhan632/Auto-GPT-AlpacaTrader-Plugi
    ```
    default for APCA_IS_PAPER is True 
 
-   If the plugin is not allowlisted, you will be warned before it's loaded.
+   If the plugin is not allowlisted, you will be warned before it's loaded. 
+   
+   If you have not added the plugin to allowlisted or `APCA_IS_PAPER=True` in the .env file, you will have to generate a Paper account API key on the Alpaca.
 
    Decent startup config, for ai_settings.yaml
    ```
