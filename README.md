@@ -54,9 +54,11 @@ cd plugins; git clone https://github.com/danikhan632/Auto-GPT-AlpacaTrader-Plugi
    ALLOWLISTED_PLUGINS=AutoGPTAlpacaTraderPlugin
    APCA_API_KEY_ID=your_api_key
    APCA_API_SECRET_KEY=your_api_secret_key
-   APCA_IS_PAPER=True 
+   APCA_PAPER=True
+   APCA_SAFE=True 
    ```
-   default for APCA_IS_PAPER is True 
+   default for APCA_PAPER is True 
+   default for APCA_SAFE is True which restricts stocks that can be traded
 
    If the plugin is not allowlisted, you will be warned before it's loaded. 
    

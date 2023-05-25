@@ -12,7 +12,10 @@ class Trader():
     """
 
     def __init__(self):
-        self.trading_client =  TradingClient(os.environ.get('APCA_API_KEY_ID'), os.environ.get('APCA_API_SECRET_KEY')  ,paper=True)
+        self.trading_client =  TradingClient(
+        os.environ.get('APCA_API_KEY_ID'), 
+        os.environ.get('APCA_API_SECRET_KEY'),
+        paper=bool(os.environ.get('APCA_PAPER',True)))
 
     def close_trade(self,symbol):
         positions = self.trading_client.get_all_positions()

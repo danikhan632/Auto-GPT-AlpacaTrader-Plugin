@@ -5,6 +5,7 @@ from auto_gpt_plugin_template import AutoGPTPluginTemplate
 import pandas as pd
 import numpy as np
 import requests
+import os
 from .trader import Trader
 
 PromptGenerator = TypeVar("PromptGenerator")
@@ -41,12 +42,6 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             self.cli.get_account_information
         ),
         prompt.add_command(
-            "Get Allowed Stocks",
-            "get_allowed_stocks",
-            {},
-            self.cli.get_allowed_stocks
-        ),
-        prompt.add_command(
             "Get Positions",
             "get_positions",
             {},
@@ -64,6 +59,13 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             },
             self.cli.place_trade
         )
+        if bool(os.environ.get('APCA_SAFE',True)):
+            prompt.add_command(
+                "Get Allowed Stocks",
+                "get_allowed_stocks",
+                {},
+                self.cli.get_allowed_stocks
+            )
         return prompt
 # ______________________________________________________________________________________________________________________
 
