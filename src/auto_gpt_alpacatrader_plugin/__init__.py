@@ -233,3 +233,43 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
               bool: True if the plugin can handle the chat_completion method."""
         return False
 
+
+    def can_handle_user_input(self, user_input: str) -> bool:
+        """This method is called to check that the plugin can
+        handle the user_input method.
+
+        Args:
+            user_input (str): The user input.
+
+        Returns:
+            bool: True if the plugin can handle the user_input method."""
+        return False
+
+
+    def user_input(self, user_input: str) -> str:
+        """This method is called to request user input to the user.
+
+        Args:
+            user_input (str): The question or prompt to ask the user.
+
+        Returns:
+            str: The user input.
+        """
+
+        return ""
+
+    def can_handle_report(self) -> bool:
+        """This method is called to check that the plugin can
+        handle the report method.
+
+        Returns:
+            bool: True if the plugin can handle the report method."""
+        return False
+
+    def report(self, message: str) -> None:
+        """This method is called to report a message to the user.
+
+        Args:
+            message (str): The message to report.
+        """
+        i=5
