@@ -275,5 +275,5 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
         pass
     def can_handle_text_embedding(self) -> bool:
         return False
-    def handle_text_embedding(self) 
+    def handle_text_embedding(self):
         pass
