@@ -42,6 +42,30 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             self.cli.get_account_information
         ),
         prompt.add_command(
+            "Get top movers",
+            "get_top_movers",
+            {},
+            self.cli.get_large_movers
+        ),
+        prompt.add_command(
+            "Get stock ideas",
+            "get_ideas",
+            {},
+            self.cli.get_ideas
+        ),
+        prompt.add_command(
+            "Get stock news",
+            "get_stock_news",
+            {"symbol": "<symbol>",},
+            self.cli.get_sym_news
+        ),
+        prompt.add_command(
+            "Get market sentiment",
+            "get_market_sentiment",
+            {},
+            self.cli.get_market_sentiment
+        ),
+        prompt.add_command(
             "Get Positions",
             "get_positions",
             {},
@@ -59,13 +83,7 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             },
             self.cli.place_trade
         )
-        if bool(os.environ.get('APCA_SAFE',True)):
-            prompt.add_command(
-                "Get Allowed Stocks",
-                "get_allowed_stocks",
-                {},
-                self.cli.get_allowed_stocks
-            )
+
         return prompt
 # ______________________________________________________________________________________________________________________
 
@@ -172,7 +190,7 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
         handle the post_instruction method.
         Returns:
             bool: True if the plugin can handle the post_instruction method."""
-        return False
+        
 
     def post_instruction(self, response: str) -> str:
         """This method is called after the instruction chat is done.
@@ -273,6 +291,7 @@ class AutoGPTAlpacaTraderPlugin(AutoGPTPluginTemplate):
             message (str): The message to report.
         """
         pass
+        
     def can_handle_text_embedding(self) -> bool:
         return False
     def handle_text_embedding(self):
